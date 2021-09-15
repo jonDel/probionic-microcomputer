@@ -1,3 +1,4 @@
+"Servomotor rotor and an object proximity control algorithm simulator."
 from bisect import bisect_left
 from pandas import DataFrame
 import numpy as np
