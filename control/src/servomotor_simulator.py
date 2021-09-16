@@ -7,9 +7,8 @@ from numpy import ndarray
 from scipy import optimize
 
 
-MATERIALS_PROFILES = [
-    {
-        "name": "metal blade",
+MATERIALS_PROFILES = {
+    "metal blade": {
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
         "deformation_duration_mean": 0,
@@ -22,8 +21,7 @@ MATERIALS_PROFILES = [
         "n_samples_std": 0,
         "time_step_delay_std": 0
     },
-    {
-        "name": "rubber ball",
+    "rubber ball": {
         "max_deformation_mean": -0.5623423444444444,
         "max_deformation_std": 0.03395287190018319,
         "deformation_duration_mean": 0.8065369,
@@ -37,8 +35,7 @@ MATERIALS_PROFILES = [
         "current_noise_std": 8.777813898712585,
         "time_step_delay_std": 0.000801660182630725
     },
-    {
-        "name": "cardboard",
+    "cardboard": {
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
         "deformation_duration_mean": 0,
@@ -51,8 +48,7 @@ MATERIALS_PROFILES = [
         "n_samples_std": 0,
         "time_step_delay_std": 0
     },
-    {
-        "name": "polystyrene",
+    "polystyrene": {
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
         "deformation_duration_mean": 0,
@@ -65,7 +61,7 @@ MATERIALS_PROFILES = [
         "n_samples_std": 0,
         "time_step_delay_std": 0
     }
-]
+}
 
 
 class PlantSimulator:
