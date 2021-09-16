@@ -9,6 +9,7 @@ from scipy import optimize
 
 MATERIALS_PROFILES = {
     "metal blade": {
+        "name": "metal blade",
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
         "deformation_duration_mean": 0,
@@ -22,6 +23,7 @@ MATERIALS_PROFILES = {
         "time_step_delay_std": 0
     },
     "rubber ball": {
+        "name": "rubber ball",
         "max_deformation_mean": -0.5623423444444444,
         "max_deformation_std": 0.03395287190018319,
         "deformation_duration_mean": 0.8065369,
@@ -36,6 +38,7 @@ MATERIALS_PROFILES = {
         "time_step_delay_std": 0.000801660182630725
     },
     "cardboard": {
+        "name": "cardboard",
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
         "deformation_duration_mean": 0,
@@ -49,6 +52,7 @@ MATERIALS_PROFILES = {
         "time_step_delay_std": 0
     },
     "polystyrene": {
+        "name": "polystyrene",
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
         "deformation_duration_mean": 0,
