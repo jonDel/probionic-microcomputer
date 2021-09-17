@@ -142,10 +142,10 @@ class PlantSimulator:
             scale=self.material_profile["max_deformation_std"]
         )
         return np.linspace(
-            -1,
-            max_deformation,
+            self.object_position,
+            max_deformation + self.object_position,
             self.n_samples
-        ) + self.object_position
+        )
 
     def __get_proximity_ramp(self) -> ndarray:
         """Return the proximity ramp array of the object with the rotor.
