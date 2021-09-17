@@ -241,6 +241,7 @@ class ProsthesisSimulation:
         self.position_references = []
         self.controller_signals = []
         self.currents = []
+        self.time_steps = self.__get_simulation_time_steps()
 
     def __get_simulation_time_steps(self) -> ndarray:
         """Return the time steps array of the control simulation.
@@ -253,13 +254,18 @@ class ProsthesisSimulation:
         n_samples = int(self.simulation_duration/duration_mean) + 1
         return np.linspace(0, self.simulation_duration, n_samples)
 
-    def controller(self, error: float) -> float:
+    def controller(self, error: float, t_index: int, t_step: float) -> float:
         """Return the controller output.
 
         To be overridden with your own control algorithm.
 
         Args:
             error (float): the closed loop error.
+            t_index (int): the index of the current iteration
+            t_step (float): the time in seconds of the current iteration
+
+        Raises:
+            NotImplementedError: method not implemented in the child class.
 
         Returns:
             float: the controller output.
@@ -279,6 +285,9 @@ class ProsthesisSimulation:
             controller_signal (float): controller output
             position_reference (float): current position reference
 
+        Raises:
+            NotImplementedError: method not implemented in the child class.
+
         Returns:
             float: the rotor position
         """
@@ -294,6 +303,9 @@ class ProsthesisSimulation:
             position_reference (float): current rotor position reference.
             plant_input (float): the input to the plant.
 
+        Raises:
+            NotImplementedError: method not implemented in the child class.
+
         Returns:
             float: the rotor position reference recalibrated.
         """
@@ -303,6 +315,9 @@ class ProsthesisSimulation:
         """Return an estimative of the rotor proximity to the object.
 
         To be overridden with your own estimation.
+
+        Raises:
+            NotImplementedError: method not implemented in the child class.
 
         Args:
             current (float): the rotor current in mili Amperes.
@@ -347,14 +362,13 @@ class ProsthesisSimulation:
                 normalized_current)
         """
         position_reference = self.rotor_position_reference
-        time_steps = self.__get_simulation_time_steps()
-        for _ in time_steps:
+        for t_index, t_step in enumerate(self.time_steps):
             current = self.plant_simulator.find_nearest_current(
                 position_reference
             )
             proximity_estimate = self.proximity_estimation(current)
             error = self.error(self.proximity_reference, proximity_estimate)
-            controller_signal = self.controller(error)
+            controller_signal = self.controller(error, t_index, t_step)
             plant_input = self.conditioned_plant_input(
                 controller_signal, position_reference)
             self.errors.append(error)
@@ -368,7 +382,7 @@ class ProsthesisSimulation:
             )
         sim_df = DataFrame(
             {
-                "timestamp": time_steps,
+                "timestamp": self.time_steps,
                 "rotor_position": self.rotor_positions,
                 "error": self.errors,
                 "proximity_estimate": self.proximity_estimates,
@@ -419,11 +433,13 @@ class ProsthesisSimulation:
 class ProsthesisSimulationKControl(ProsthesisSimulation):
     """Simulate the use of a proportional controller on a prosthesis plant."""
 
-    def controller(self, error: float) -> float:
-        """Return the controller output.
+    def controller(self, error: float, t_index: int, t_step: float) -> float:
+        """Return the proportional controller output.
 
         Args:
             error (float): the closed loop error.
+            t_index (int): the index of the current iteration
+            t_step (float): the time in seconds of the current iteration
 
         Returns:
             float: the controller output.
