@@ -89,6 +89,11 @@ class PlantSimulator:
                 given, the default value from material profile dict will be
                 used. Defaults to 0.
         """
+        if object_position < -1 or object_position > 1:
+            raise ValueError(
+                "The object position must be a value between -1 and 1, "
+                f"not {object_position}!"
+            )
         self.object_position = object_position
         self.material_profile = material_profile
         self.original_n_samples = int(np.random.normal(
@@ -141,9 +146,17 @@ class PlantSimulator:
             loc=self.material_profile["max_deformation_mean"],
             scale=self.material_profile["max_deformation_std"]
         )
+        final_position = abs(max_deformation) + self.object_position
+        if final_position > 1:
+            raise ValueError(
+                "You must choose a lesser value for the object position"
+                f" since, with the {self.material_profile['name']}, the "
+                f"maximum deformation {final_position} would be greater "
+                "than the maximum possible position for the rotor, 1"
+            )
         return np.linspace(
             self.object_position,
-            max_deformation + self.object_position,
+            final_position,
             self.n_samples
         )
 
@@ -231,6 +244,11 @@ class ProsthesisSimulation:
                 in the control methods. Defaults to {}.
         """
         self.plant_simulator = plant_simulator
+        if rotor_position_reference < -1 or rotor_position_reference > 1:
+            raise ValueError(
+                "The rotor position reference must be a value between -1 and 1"
+                f", not {rotor_position_reference}!"
+            )
         self.rotor_position_reference = rotor_position_reference
         self.proximity_reference = proximity_reference
         self.simulation_duration = simulation_duration
