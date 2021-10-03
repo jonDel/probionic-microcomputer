@@ -68,6 +68,24 @@ MATERIALS_PROFILES = {
 }
 
 
+def limiter(value: float, minimum: float, maximum: float) -> float:
+    """Clip the value to the range minimum - maximum.
+
+    Args:
+        value (float): given value to be clipped
+        minimum (float): minimum accepted value
+        maximum (float): maximum accepted value
+
+    Returns:
+        float: the input value clipped.
+    """
+    if value < minimum:
+        value = minimum
+    elif value > maximum:
+        value = maximum
+    return value
+
+
 class PlantSimulator:
     """Simulate a plant with a servomotor and a current sensor."""
 
@@ -332,18 +350,15 @@ class ProsthesisSimulation:
     def proximity_estimation(self, current: float) -> float:
         """Return an estimative of the rotor proximity to the object.
 
-        To be overridden with your own estimation.
-
-        Raises:
-            NotImplementedError: method not implemented in the child class.
-
         Args:
             current (float): the rotor current in mili Amperes.
 
         Returns:
             float: the proximity estimative.
         """
-        raise NotImplementedError("You must override this method!")
+        proximity = (3.07e-06*(current)**3 - 4.53e-03*(current)**2
+                     + 2.14*(current)+5.05)/(367.3*(850/750))
+        return limiter(proximity, 0, 1)
 
     def error(
         self,
@@ -359,10 +374,6 @@ class ProsthesisSimulation:
         Returns:
             float: the controller error
         """
-        if proximity_estimate > 1:
-            proximity_estimate = 1
-        elif proximity_estimate < 0:
-            proximity_estimate = 0
         return proximity_reference - proximity_estimate
 
     def run(self, show_plots: bool = True) -> DataFrame:
@@ -446,63 +457,3 @@ class ProsthesisSimulation:
             fig.update_yaxes(title_text="Variables values")
             fig.show()
         return sim_df
-
-
-class ProsthesisSimulationKControl(ProsthesisSimulation):
-    """Simulate the use of a proportional controller on a prosthesis plant."""
-
-    def controller(self, error: float, t_index: int, t_step: float) -> float:
-        """Return the proportional controller output.
-
-        Args:
-            error (float): the closed loop error.
-            t_index (int): the index of the current iteration
-            t_step (float): the time in seconds of the current iteration
-
-        Returns:
-            float: the controller output.
-        """
-        return self.controller_params["proportional_k"]*error
-
-    def conditioned_plant_input(
-        self,
-        controller_signal: float,
-        position_reference: float
-    ) -> float:
-        """Return the input to the plant given the controller output.
-
-        Args:
-            controller_signal (float): controller output
-            position_reference (float): current position reference
-
-        Returns:
-            float: the rotor position
-        """
-        return controller_signal*0.01 + position_reference
-
-    def recalibrate_position_reference(
-            self, position_reference: float, plant_input: float) -> float:
-        """Recalibrate the position reference to match the proximity reference.
-
-        Args:
-            position_reference (float): current rotor position reference.
-            plant_input (float): the input to the plant.
-
-        Returns:
-            float: the rotor position reference recalibrated.
-        """
-        return plant_input
-
-    def proximity_estimation(self, current: float) -> float:
-        """Return an estimative of the rotor proximity to the object.
-
-        To be overridden with your own estimation.
-
-        Args:
-            current (float): the rotor current in mili Amperes.
-
-        Returns:
-            float: the proximity estimative.
-        """
-        return (3.07e-06*(current)**3
-                - 4.53e-03*(current)**2+2.14*(current)+5.05)/367.3
