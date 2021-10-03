@@ -16,7 +16,7 @@ class ProsthesisSimulationKControl(ProsthesisSimulation):
         Returns:
             float: the controller output.
         """
-        return self.controller_params["proportional_k"]*error
+        return self.controller_params["kp"]*error
 
     def conditioned_plant_input(
         self,
