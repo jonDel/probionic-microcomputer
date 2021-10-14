@@ -123,7 +123,7 @@ def get_model(n_time_steps: int, n_channels: int, n_classes: int,
         "log_dir": "results/logs/",
         "history_path": "../results/history/",
         "weights_pattern": WEIGHTS_PATTERN,
-        "write_images": True          
+        "write_images": True
     }
     def_args.update(kwargs)
     model = deep_conv_lstm(n_time_steps, n_channels, n_classes, **kwargs)
@@ -198,13 +198,13 @@ def run_training(
     n_classes = max(y_true) + 1
     model, callbacks_list, params = get_model(n_time_steps, n_channels,
                                               n_classes, **kwargs)
-    res = load_pretrained(model, params["weights_path"])
-    if res[0]:
+    try:
+        res = load_pretrained(model, params["weights_path"])
         initial_epoch = res[1]
         logger.debug("Using pre-trained weights... resuming from epoch {}".
                      format(initial_epoch))
         model = res[0]
-    else:
+    except OSError:
         initial_epoch = 0
     model.summary()
     init = time.time()
