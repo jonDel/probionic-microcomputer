@@ -120,7 +120,7 @@ def get_model(n_time_steps: int, n_channels: int, n_classes: int,
         "min_lr": 0.001,
         "lr_factor": 0.2,
         "weights_path": "../results/weights/",
-        "log_dir": "results/logs/",
+        "log_dir": "../results/logs/",
         "history_path": "../results/history/",
         "weights_pattern": WEIGHTS_PATTERN,
         "write_images": True
@@ -183,7 +183,7 @@ def run_training(
         "dropout_prob": 0.5,
         "lstm_activation": "tanh",
         "validation_split": 0.1,
-        "batch_size": None
+        "batch_size": 1024
     }
     def_args.update(kwargs)
     w_folder = train_params["weights_path"]
