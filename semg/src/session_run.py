@@ -24,9 +24,9 @@ np.random.seed(1)
 logger = logging.getLogger("deepconvlstm")
 TRAIN_PARAMS = {
     "datasets_path": "../datasets",
-    "weights_path": "results/weights/",
-    "log_dir": "results/logs/",
-    "history_path": "results/history/",
+    "weights_path": "../results/weights/",
+    "log_dir": "../results/logs/",
+    "history_path": "../results/history/",
     "window_factor": 0.1,
     "subsamp_rate": 1,
     "train_split": 3
@@ -119,9 +119,9 @@ def get_model(n_time_steps: int, n_channels: int, n_classes: int,
         "checkpoint_mode": "max",
         "min_lr": 0.001,
         "lr_factor": 0.2,
-        "weights_path": "results/weights/",
+        "weights_path": "../results/weights/",
         "log_dir": "results/logs/",
-        "history_path": "results/history/",
+        "history_path": "../results/history/",
         "weights_pattern": WEIGHTS_PATTERN,
         "write_images": True          
     }
