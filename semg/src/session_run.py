@@ -23,7 +23,7 @@ K.set_learning_phase(1)
 np.random.seed(1)
 logger = logging.getLogger("deepconvlstm")
 TRAIN_PARAMS = {
-    "datasets_path": "../datasets",
+    "datasets_path": "../datasets/tagged_semg/",
     "weights_path": "../results/weights/",
     "log_dir": "../results/logs/",
     "history_path": "../results/history/",
