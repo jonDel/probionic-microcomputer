@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 from numpy import ndarray
 from pandas import DataFrame
+import pandas as pd
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, \
     EarlyStopping, ReduceLROnPlateau
@@ -154,6 +155,7 @@ def run_training(
         overlap_step: float = 0.01,
         time_step_window: float = 0.2,
         train_params: dict = TRAIN_PARAMS,
+        resume_training: bool = True,
         **kwargs) -> Tuple[ndarray, ndarray, ndarray, Sequential]:
     """Trains a deepconvlstm model on SEMG data.
 
@@ -166,6 +168,8 @@ def run_training(
              Defaults to 0.2.
         train_params (dict, optional): specific training parameters.
              Defaults to TRAIN_PARAMS.
+        resume_training (bool, optional): wether to resume training from
+            a previous training session. Defaults to True.
 
     Returns:
         Tuple[ndarray, ndarray, ndarray, Sequential]: a tuple of a predictions
@@ -198,14 +202,16 @@ def run_training(
     n_classes = max(y_true) + 1
     model, callbacks_list, params = get_model(n_time_steps, n_channels,
                                               n_classes, **kwargs)
-    try:
-        res = load_pretrained(model, params["weights_path"])
-        initial_epoch = res[1]
-        logger.debug("Using pre-trained weights... resuming from epoch {}".
-                     format(initial_epoch))
-        model = res[0]
-    except OSError:
-        initial_epoch = 0
+    initial_epoch = 0
+    if resume_training:
+        try:
+            res = load_pretrained(model, params["weights_path"])
+            initial_epoch = res[1]
+            logger.debug("Using pre-trained weights... resuming from epoch {}".
+                         format(initial_epoch))
+            model = res[0]
+        except OSError:
+            pass
     model.summary()
     init = time.time()
     hist = model.fit(X_train, Y_train, epochs=epochs,
@@ -244,16 +250,16 @@ def get_combined_df(datasets_folder: str = "../datasets") -> DataFrame:
     """
     df_hold_ball = sync_classes(
         datasets_folder + "/raw/power_sphere.csv",
-        datasets_folder + "/annotated_classes/power_sphere_classes.csv")
+        datasets_folder + "/annotated_intervals/power_sphere_classes.csv")
     df_hold_tripod_ball = sync_classes(
         datasets_folder + "/raw/tripod.csv",
-        datasets_folder + "/annotated_classes/tripod_classes.csv")
+        datasets_folder + "/annotated_intervals/tripod_classes.csv")
     df_hold_cup = sync_classes(
         datasets_folder + "/raw/medium_wrap.csv",
-        datasets_folder + "/annotated_classes/medium_wrap_classes.csv")
+        datasets_folder + "/annotated_intervals/medium_wrap_classes.csv")
     df_hold_card = sync_classes(
         datasets_folder + "/raw/lateral.csv",
-        datasets_folder + "/annotated_classes/lateral_classes.csv")
+        datasets_folder + "/annotated_intervals/lateral_classes.csv")
     return combine_datasets(
         [
             df_hold_cup,
@@ -273,5 +279,11 @@ if __name__ == "__main__":
     logger.addHandler(hdlr)
     logger.addHandler(stdout_hdlr)
     logger.setLevel(logging.DEBUG)
+    dataframes = [
+        pd.read_csv("../datasets/tagged_semg/medium_wrap.csv"),
+        pd.read_csv("../datasets/tagged_semg/lateral.csv"),
+        pd.read_csv("../datasets/tagged_semg/tripod.csv"),
+        pd.read_csv("../datasets/tagged_semg/power_sphere.csv"),
+    ]
     predictions, y_true, predictions_prob, model = \
-        run_training(get_combined_df())
+        run_training(combine_datasets(dataframes))
