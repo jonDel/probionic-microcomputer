@@ -99,7 +99,7 @@ def get_train_data(
         backend: str = "keras",
         overlap_step: float = 0.01,
         time_step_window: float = 0.2,
-        test_size: float = 0.3,
+        test_size: float = 0.2,
         agg_func: FunctionType = root_mean_square,
         n_channels: int = 1) -> List[ndarray]:
     """Return data ready to train a machine learning model.
@@ -113,7 +113,7 @@ def get_train_data(
         time_step_window (float, optional): sliding window size, in seconds.
              Defaults to 0.2.
         test_size (float, optional): proportion of data to use as test after
-            the training. Defaults to 0.3.
+            the training. Defaults to 0.2.
         agg_func (FunctionType, optional): function to be applied to each time
             window, when using sklearn as backend. Defaults to root mean
             square.
