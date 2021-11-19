@@ -6,7 +6,8 @@ import plotly.graph_objects as go
 from numpy import ndarray
 from scipy import optimize
 
-
+#Only the rubber ball profile is completed. The others must be calculated from the files in
+#the controls/data/current_readings folder
 MATERIALS_PROFILES = {
     "metal blade": {
         "name": "metal blade",
