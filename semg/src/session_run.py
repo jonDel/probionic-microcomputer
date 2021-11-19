@@ -24,13 +24,9 @@ K.set_learning_phase(1)
 np.random.seed(1)
 logger = logging.getLogger("deepconvlstm")
 TRAIN_PARAMS = {
-    "datasets_path": "../datasets/tagged_semg/",
     "weights_path": "../results/weights/",
     "log_dir": "../results/logs/",
-    "history_path": "../results/history/",
-    "window_factor": 0.1,
-    "subsamp_rate": 1,
-    "train_split": 3
+    "history_path": "../results/history/"
 }
 WEIGHTS_PATTERN = "epoch:{epoch:02d}-accuracy:{accuracy:." + \
     "4f}-val_accuracy:{val_accuracy:." + \
