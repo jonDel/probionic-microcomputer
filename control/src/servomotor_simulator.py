@@ -1,5 +1,6 @@
 "Servomotor rotor and an object proximity control algorithm simulator."
 from bisect import bisect_left
+from types import MappingProxyType
 from pandas import DataFrame
 import numpy as np
 import plotly.graph_objects as go
@@ -247,7 +248,7 @@ class ProsthesisSimulation:
         proximity_reference: float,
         rotor_position_reference: float,
         simulation_duration: float = 30,
-        controller_params: dict = {}
+        controller_params: dict = None
     ) -> None:
         """Simulate a control algorithm on a prosthesis.
 
@@ -271,7 +272,7 @@ class ProsthesisSimulation:
         self.rotor_position_reference = rotor_position_reference
         self.proximity_reference = proximity_reference
         self.simulation_duration = simulation_duration
-        self.controller_params = controller_params
+        self.controller_params = controller_params if controller_params else {}
         self.rotor_positions = []
         self.errors = []
         self.proximity_estimates = []
