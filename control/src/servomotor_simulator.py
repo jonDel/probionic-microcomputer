@@ -10,7 +10,7 @@ from scipy import optimize
 #Only the rubber ball profile is completed. The others must be calculated from the files in
 #the controls/data/current_readings folder
 MATERIALS_PROFILES = MappingProxyType({
-    "metal blade": {
+    "metal blade": MappingProxyType({
         "name": "metal blade",
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
@@ -23,8 +23,8 @@ MATERIALS_PROFILES = MappingProxyType({
         "n_samples_mean": 0,
         "n_samples_std": 0,
         "time_step_delay_std": 0
-    },
-    "rubber ball": {
+    }),
+    "rubber ball": MappingProxyType({
         "name": "rubber ball",
         "max_deformation_mean": -0.5623423444444444,
         "max_deformation_std": 0.03395287190018319,
@@ -38,8 +38,8 @@ MATERIALS_PROFILES = MappingProxyType({
         "n_samples_std": 15.545095689637938,
         "current_noise_std": 8.777813898712585,
         "time_step_delay_std": 0.000801660182630725
-    },
-    "cardboard": {
+    }),
+    "cardboard": MappingProxyType({
         "name": "cardboard",
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
@@ -52,8 +52,8 @@ MATERIALS_PROFILES = MappingProxyType({
         "n_samples_mean": 0,
         "n_samples_std": 0,
         "time_step_delay_std": 0
-    },
-    "polystyrene": {
+    }),
+    "polystyrene": MappingProxyType({
         "name": "polystyrene",
         "max_deformation_mean": 0,
         "max_deformation_std": 0,
@@ -66,7 +66,7 @@ MATERIALS_PROFILES = MappingProxyType({
         "n_samples_mean": 0,
         "n_samples_std": 0,
         "time_step_delay_std": 0
-    }
+    })
 })
 
 
