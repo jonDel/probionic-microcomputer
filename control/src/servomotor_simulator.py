@@ -1,6 +1,5 @@
 "Servomotor rotor and an object proximity control algorithm simulator."
 from bisect import bisect_left
-from types import MappingProxyType
 from pandas import DataFrame
 import numpy as np
 import plotly.graph_objects as go
