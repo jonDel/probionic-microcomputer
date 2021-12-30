@@ -1,4 +1,5 @@
 "Servomotor rotor and an object proximity control algorithm simulator."
+from types import MappingProxyType
 from bisect import bisect_left
 from pandas import DataFrame
 import numpy as np
@@ -8,7 +9,7 @@ from scipy import optimize
 
 #Only the rubber ball profile is completed. The others must be calculated from the files in
 #the controls/data/current_readings folder
-MATERIALS_PROFILES = {
+MATERIALS_PROFILES = MappingProxyType({
     "metal blade": {
         "name": "metal blade",
         "max_deformation_mean": 0,
@@ -66,7 +67,7 @@ MATERIALS_PROFILES = {
         "n_samples_std": 0,
         "time_step_delay_std": 0
     }
-}
+})
 
 
 def limiter(value: float, minimum: float, maximum: float) -> float:
