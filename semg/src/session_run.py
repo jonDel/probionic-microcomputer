@@ -1,6 +1,5 @@
 """Trains a deepconvlstm model on SEMG data."""
-from typing import Tuple
-from types import MappingProxyType
+from typing import Tuple, Final
 import time
 import re
 import sys
@@ -24,11 +23,11 @@ K.set_image_data_format("channels_last")
 K.set_learning_phase(1)
 np.random.seed(1)
 logger = logging.getLogger("deepconvlstm")
-TRAIN_PARAMS = MappingProxyType({
+TRAIN_PARAMS: Final = {
     "weights_path": "../results/weights/",
     "log_dir": "../results/logs/",
     "history_path": "../results/history/"
-})
+}
 WEIGHTS_PATTERN = "epoch:{epoch:02d}-accuracy:{accuracy:." + \
     "4f}-val_accuracy:{val_accuracy:." + \
     "4f}.hdf5"
