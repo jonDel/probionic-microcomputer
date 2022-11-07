@@ -23,7 +23,7 @@ K.set_image_data_format("channels_last")
 K.set_learning_phase(1)
 np.random.seed(1)
 logger = logging.getLogger("deepconvlstm")
-TRAIN_PARAMS: {
+TRAIN_PARAMS = {
     "weights_path": "../results/weights/",
     "log_dir": "../results/logs/",
     "history_path": "../results/history/"
